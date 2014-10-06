@@ -1,14 +1,10 @@
 package org.qik.empire.core;
 
-import com.sun.corba.se.spi.ior.ObjectKey;
 import org.qik.empire.context.SessionContext;
 import org.qik.empire.utils.Lambda;
-import org.qik.empire.utils.Utils;
 
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableCollection;
@@ -34,9 +30,9 @@ public class ServiceContainer {
         injects.put(service.getClass(), service);
 
         asLambda(service.getClass().getMethods())
-                .filter(method -> method.isAnnotationPresent(Command.class))
-                .map(method -> buildEntryPoint(service, method))
-        .copyToIndex(entryPointMap, ep -> ep.getCommandName());
+                .filter( method -> method.isAnnotationPresent(Command.class) )
+                .map(    method -> buildEntryPoint(service, method))
+        .copyToIndex(entryPointMap, ep -> ep.getCommandName() );
     }
 
     public Collection<String> getCommandList() {

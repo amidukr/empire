@@ -1,20 +1,11 @@
 package org.qik.empire.utils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static java.util.Arrays.asList;
-import static java.util.Spliterators.spliterator;
-import static java.util.stream.StreamSupport.stream;
-
-import static org.qik.empire.utils.Utils.toStr;
 
 /**
  * Created by qik on 05.10.2014.
