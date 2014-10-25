@@ -2,8 +2,6 @@ package org.qik.empire.core;
 
 import org.qik.empire.context.SessionContext;
 
-import java.util.Map;
-
 /**
  * Created by qik on 05.10.2014.
  */

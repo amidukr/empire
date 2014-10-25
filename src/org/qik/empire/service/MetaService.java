@@ -1,31 +1,28 @@
 package org.qik.empire.service;
 
-import org.qik.empire.context.SessionContext;
-import org.qik.empire.core.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.qik.empire.context.SessionContext.currentSession;
+import org.qik.empire.core.Command;
+import org.qik.empire.core.EntryPointsContainer;
+import org.qik.empire.core.Inject;
+import org.qik.empire.core.Service;
 
 /**
  * Created by qik on 05.10.2014.
  */
 public class MetaService implements Service {
-    private ServiceContainer    serviceContainer;
+    private EntryPointsContainer entryPointsContainer;
     private AuthService         authService;
 
 
     @Inject
-    public void inject(ServiceContainer serviceContainer,
+    public void inject(EntryPointsContainer entryPointsContainer,
                        AuthService authService) {
-        this.serviceContainer = serviceContainer;
+        this.entryPointsContainer = entryPointsContainer;
         this.authService      = authService;
     }
 
-    @Command
+    @Command("commands")
     public String help() {
-        return serviceContainer.getCommandList().toString();
+        return entryPointsContainer.getCommandList().toString();
     }
 
     @Command
@@ -34,7 +31,7 @@ public class MetaService implements Service {
             return "Not enough permissions";
         }
 
-        ServiceContainer.EntryPoint ep = serviceContainer.getEntryPoint(command);
+        EntryPointsContainer.EntryPoint ep = entryPointsContainer.getEntryPoint(command);
 
         return String.format("%s::%s -> to %s", ep.getCommandName(),
                                                 ep.getReturnType(),
