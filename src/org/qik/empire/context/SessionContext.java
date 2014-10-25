@@ -2,6 +2,7 @@ package org.qik.empire.context;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Created by qik on 05.10.2014.
@@ -22,7 +23,18 @@ public class SessionContext {
     }
 
 
+    public static void openSession(Consumer<SessionContext> block) {
 
+        try{
+            SessionContext sessionContext = new SessionContext();
+            setCurrentContext(sessionContext);
+
+            block.accept(sessionContext);
+
+        }finally {
+            releaseCurrentContext();
+        }
+    }
 
 
     public static SessionContext currentSession() {
