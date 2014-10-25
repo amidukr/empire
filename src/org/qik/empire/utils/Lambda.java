@@ -20,6 +20,15 @@ public class Lambda<T> implements Iterable<T> {
         this.input = input;
     }
 
+    @Override
+    public Iterator<T> iterator() {
+        return new LambdaIterator(input.iterator());
+    }
+
+
+
+
+
     public Lambda<T> filter(Predicate<T> filter) {
         Lambda result = new Lambda(this);
         result.filterFunction = filter;
@@ -33,7 +42,24 @@ public class Lambda<T> implements Iterable<T> {
         return result;
     }
 
-    public <C extends Collection<T>> C copyTo(C result) {
+
+
+
+
+
+    public Lambda<T> copy(){
+        return new Lambda<T>(toList());
+    }
+
+    public List<T> toList(){
+        return copyTo(new ArrayList<>());
+    }
+
+    public List<? super T> toList(Class<? super T> clazz){
+        return copyTo(new ArrayList<T>());
+    }
+
+    public <C extends Collection<? super T>> C copyTo(C result) {
         for(T element: this) {
             result.add(element);
         }
@@ -41,8 +67,17 @@ public class Lambda<T> implements Iterable<T> {
         return result;
     }
 
-    public List<T> toList(){
-        return copyTo(new ArrayList<>());
+
+
+
+    @SuppressWarnings("unchecked")
+    public T[] toArray(Class<T> objectClass) {
+        return toList().toArray((T[]) Array.newInstance(objectClass, 0));
+    }
+
+    public <K, V> Map<K, V> toMap(Function<T, K> keyFunction,
+                                  Function<T, V> valueFunction) {
+        return copyToMap(new HashMap<>(), keyFunction, valueFunction);
     }
 
     public <K, V, M extends Map<K, V>>
@@ -61,28 +96,16 @@ public class Lambda<T> implements Iterable<T> {
                                    x -> x);
     }
 
-    public Lambda<T> copy(){
-        ArrayList<T> target = new ArrayList<>();
 
-        for(T element: this) {
-            target.add(element);
-        }
+    public static <T> Lambda<T> asLambda____(T... array) { return new Lambda<>(asList(array)); }
+    public static <T> Lambda<T> asLambda    (T... array) { return new Lambda<>(asList(array)); }
 
-        return new Lambda<T>(target);
-    }
+    public static <T> Lambda<T> asLambda____(Iterable<T> iterable) { return new Lambda<>(iterable); }
+    public static <T> Lambda<T> asLambda    (Iterable<T> iterable) { return new Lambda<>(iterable); }
 
-    @Override
-    public Iterator<T> iterator() {
-        return new LambdaIterator(input.iterator());
-    }
 
-    public static <T> Lambda<T> asLambda(T... array) {
-        return new Lambda<>(asList(array));
-    }
 
-    public T[] toArray(Class<T> objectClass) {
-        return toList().toArray((T[]) Array.newInstance(objectClass, 0));
-    }
+
 
     private class LambdaIterator implements Iterator<T> {
         private Iterator<T> iterator;
